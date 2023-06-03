@@ -6,6 +6,11 @@ import os
 df = pd.read_csv("data.csv")
 print(df.columns)
 print('-'*80)
+
+# df = df.astype({'판례일련번호':'int'})
+print(df['판례일련번호'].info())
+# import sys
+# sys.exit()
 # print(df.head())
 from bs4 import BeautifulSoup
 import requests
@@ -44,11 +49,10 @@ def remove_tag(content):
     return cleaned_text
 
 data_list = []
+
 url_default = "https://www.law.go.kr"
 
 for idx in tqdm(df.index):
-    if idx < 78840:
-        continue
     url_detail = df.loc[idx, "판례상세링크"].replace('HTML', 'XML')
     url = f"{url_default}{url_detail}"
 
@@ -69,16 +73,26 @@ for idx in tqdm(df.index):
         #     print(xtree.find(c).text)
         #     raise("eee")
     # data_list.append(data_dict)
+    input_dict = {}
     for c in [    '판시사항', 
     '판결요지', 
     '참조조문', 
     '참조판례', 
     '판례내용', ]:
-        with open(f"판례/{c}/{data_dict['판례정보일련번호']}.txt", "w") as f:
-            if data_dict[c] != "":
-                f.write(data_dict[c])
-        
+        # with open(f"판례/{c}/{data_dict['판례정보일련번호']}.txt", "w") as f:
+        #     if data_dict[c] != "":
+        #         f.write(data_dict[c])
+        input_dict[c] = data_dict[c]
+    input_dict["판례일련번호"] = int(data_dict['판례정보일련번호'])
+    data_list.append(input_dict)
+
     # break
-# new_df = pd.DataFrame(data_list)
-# new_df.to_csv("precedent.csv", index=False)
-# print("done!")
+
+
+new_df = pd.DataFrame(data_list)
+print(new_df.info())
+res_df = pd.merge(df, new_df, on='판례일련번호', how='inner')
+
+
+res_df.to_csv("result.csv", index=False)
+print("done!")
