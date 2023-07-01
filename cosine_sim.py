@@ -1,3 +1,8 @@
+"""
+판례 데이터 중에서, 
+특정 판례를 선택하고, 
+그 판례와 가장 유사한 판례를 찾아주는 코드입니다.
+"""
 import pickle
 import glob
 import numpy as np
@@ -33,25 +38,12 @@ for key2, vecs2 in tqdm(precedent_dict.items(), leave=False):
     cs_list.append(np.max(sub_list))
 
 cs_list = np.array(cs_list)
+
 # 가장 큰 값과 그 값의 인덱스 뽑아내기
 sorted_indices = np.argsort(cs_list)
 largest_values = cs_list[sorted_indices[-10:]][::-1]
 largest_indices = sorted_indices[-10:][::-1]
 
-# print("가장 큰 값 배열:", largest_values)
-# print("인덱스 배열:", largest_indices)
-# 배열에서 가장 큰 값 3개를 뽑아내기
-# largest_values = np.partition(cs_list, -10)[-10:]
-
-# 배열에서 가장 큰 값 10개의 인덱스를 알아내기
-# largest_indices = np.argpartition(cs_list, -10)[-10:]
-
-
-# print(largest_values)
-# print(largest_indices)
-
-
-# cs_list.pop(random_number)
 for i in range(10):
     # print(i)
     similar_precedent_score = largest_values[i]#np.max(cs_list)

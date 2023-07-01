@@ -1,3 +1,8 @@
+"""
+특정 상황을 입력하면, 
+판례 데이터 중에서 그 상황과 가장 유사한 판례를 찾아주는 코드입니다.
+"""
+
 from transformers import AutoTokenizer, AutoModel
 import torch
 import numpy as np
@@ -28,15 +33,7 @@ with torch.no_grad():
 
 # Perform pooling. In this case, mean pooling.
 sentence_embeddings = mean_pooling(model_output, encoded_input['attention_mask'])
-
-# print("Sentence embeddings:")
-# print(sentence_embeddings.shape)
-# print(sentence_embeddings)
-
-# print(sentence_embeddings.squeeze().numpy().shape)
 vecs1 = sentence_embeddings.numpy()
-print(vecs1.shape)
-
 
 import pickle
 import glob
@@ -45,6 +42,8 @@ from numpy import dot
 from numpy.linalg import norm
 from tqdm import tqdm
 
+MAX_RESULT = 3
+
 def cos_sim(A, B):
     return dot(A, B)/(norm(A)*norm(B))
 
@@ -52,14 +51,10 @@ with open("precedent_embedding_dict.pickle","rb") as f:
     precedent_dict = pickle.load(f)
 
 precedent_name_list = list(precedent_dict.keys())
-# print(len(precedent_name_list))
-# print(precedent_name_list[2])
-# import sys
-# sys.exit()
+
 print(f"입력한 사례\n{sentence}")
 print('-'*80)
 
-# vecs1 = precedent_dict[target_precedent_number]
 cs_list = []
 
 for key2, vecs2 in tqdm(precedent_dict.items(), leave=False):
@@ -71,12 +66,12 @@ for key2, vecs2 in tqdm(precedent_dict.items(), leave=False):
     cs_list.append(np.max(sub_list))
 
 cs_list = np.array(cs_list)
+
 # 가장 큰 값과 그 값의 인덱스 뽑아내기
 sorted_indices = np.argsort(cs_list)
 largest_values = cs_list[sorted_indices[-10:]][::-1]
 largest_indices = sorted_indices[-10:][::-1]
 
-MAX_RESULT = 3
 for i in range(10):
     # print(i)
     similar_precedent_score = largest_values[i]#np.max(cs_list)
