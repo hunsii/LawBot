@@ -17,7 +17,7 @@
 ![](image/pipeline.png)
 
 - 사용자의 현 상황을 sentence bert로 임베딩한 후, 임베딩된 판례 데이터들과 코사인 유사도를 이용해 가장 유사한 판례를 찾습니다.
-- 해당 판례를 LLM을 통해 요약하고, 사용자의 입력 상황에 맞게 판단을 내려립니다.
+- 해당 판례를 LLM을 통해 요약하고, 사용자의 입력 상황에 맞게 해당 판례를 근거로 판단을 내려줍니다.
 - LLM은 [KORANI v1(13B)](https://github.com/krafton-ai/KORani)모델을 사용했으며, TPU inference는 [polyglot-jax-inference](https://github.com/affjljoo3581/polyglot-jax-inference)를 이용하였습니다.
 
 <br>
