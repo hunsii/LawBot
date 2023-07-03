@@ -1,14 +1,19 @@
 # LawBot
-대화형 유사 판례 검색기능
+
+- LLM을 활용한 대화형 유사 판례 검색 시스템입니다.
+
+- ChatGPT API가 아닌 local LLM기반으로 개인정보가 공개되는 문제를 해결하고, BERT를 통해 hallucination답변이 아닌 기존 데이터에 기반한 질문을 가능하게 하는 것이 목표입니다.
+- 이 프로젝트는 2023-1 텍스트마이닝 수업의 프로젝트로 진행되었습니다.
+
+
+<br>
 
 ## 판례 데이터
----
 [대법원 API](https://open.law.go.kr/LSO/openApi/guideList.do)를 이용하여 대법원 판례 약 85,000개를 수집했습니다. 추후 전처리를 통해 약 60,000개의 판례를 모델에 사용했습니다.
 
 <br>
 
 ## 파이프라인
----
 ![](image/pipeline.png)
 
 - 사용자의 현 상황을 sentence bert로 임베딩한 후, 임베딩된 판례 데이터들과 코사인 유사도를 이용해 가장 유사한 판례를 찾습니다.
@@ -18,8 +23,6 @@
 <br>
 
 ## 결과
-
----
 웹 데모를 사용해보실려면 아래 코드를 입력하세요.
 
 ```shell
@@ -35,6 +38,8 @@ python app.py
 ![](image/evaluation.png)
 
 <br> 
+
+---
 
 ### prompt
 ```
@@ -78,8 +83,6 @@ LLM을 사용한 경우 Readability가 증가하였으며, 판례 데이터를 �
 <br/>
 
 ## Acknowledgement
-
----
 
 
 이 프로젝트는 [TPU Research Cloud (TRC)](https://sites.research.google/trc/about/)의 지원으로 작업했습니다.
